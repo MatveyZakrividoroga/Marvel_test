@@ -4,35 +4,24 @@ import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton'
 
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 const CharInfo=(props)=> {
-    const marvelService = new MarvelService()
-    const [char,setChar]=useState(null)
-    const [loading,setLoading]=useState(false)
-    const [error,setError]=useState(false)
+    const {loading,error, getCharacter, clearError}=useMarvelService()
     
-    const onError=()=>{
-        setLoading(false)
-        setError(true)
-    }
-    const onCharLoading=()=>{
-        setLoading(true)
-    }
+    const [char,setChar]=useState(null)
+    
     const onCharLoaded=(char)=>{
         setChar(char)
-        setLoading(false)
-        setError(false)
     }
     const updateCharacter = () => {
         const {charId}=props;
         if(!charId){
             return;
         }
-        onCharLoading();
-        marvelService.getCharacter(charId)
+        clearError()
+        getCharacter(charId)
         .then(onCharLoaded)
-        .catch(onError)
     }
     useEffect(()=>{
         updateCharacter()
