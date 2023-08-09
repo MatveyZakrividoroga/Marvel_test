@@ -64,7 +64,7 @@ const View=({char})=>{
             <div className="char__comics">Comics:</div>
             <ul className="char__comics-list">
                 {
-                    comics.length==0?<div className="char__comics">No comics</div>:
+                    comics.length===0?<div className="char__comics">No comics</div>:
                     comics.map((item,id)=>{
                         if(id>=9){
                             return;

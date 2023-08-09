@@ -1,34 +1,31 @@
-import { useState } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { lazy, Suspense } from "react";
 
+import Spinner from "../spinner/Spinner";
 import AppHeader from "../appHeader/AppHeader";
-import RandomChar from "../randomChar/RandomChar";
-import CharList from "../charList/CharList";
-import CharInfo from "../charInfo/CharInfo";
-import ComicsList from '../comicsList/ComicsList'
 
-import decoration from '../../resources/img/vision.png';
+const ComicsPage=lazy(()=>import('../pages/ComicsPage'))
+const MainPage=lazy(()=>import('../pages/MainPage'))
+const Page404=lazy(()=>import('../pages/404'))
+const SingleComicPage=lazy(()=>import('../pages/SingleComicPage'))
 
 const App =()=> {
-
-    const [selectedChar,setChar]=useState(null)
-    
-    const onCharSelected=(id)=>{
-        setChar(id)
-    }
-
     return (
-        <div className="app">
-            <AppHeader/>
-            <main>
-                <RandomChar/>
-                <div className="char__content">
-                    <CharList onCharSelected={onCharSelected}/>
-                    <CharInfo charId={selectedChar}/>
-                </div>
-                {/* <ComicsList/> */}
-                <img className="bg-decoration" src={decoration} alt="vision"/>
-            </main>
-        </div>
+        <Router>
+            <div className="app">
+                <AppHeader/>
+                <main>
+                    <Suspense fallback={<Spinner/>}>
+                        <Routes>
+                            <Route path='/comics' element={<ComicsPage/>}/>
+                            <Route path='/comics/:comicId' element={<SingleComicPage/>}/>
+                            <Route path='/' element={<MainPage/>}/>
+                            <Route path="*" element={<Page404/>}/>
+                        </Routes>
+                    </Suspense>
+                </main>
+            </div>
+        </Router>
     )
 }
 
